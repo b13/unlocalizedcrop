@@ -1,0 +1,21 @@
+{
+	"name": "cmsexperts/unlocalizedcrop",
+	"type": "typo3-cms-extension",
+	"description": "Disables cropping for translated records. Cropping of localized records are automatically taken from the original language",
+	"homepage": "https://github.com/cmsexperts/unlocalizedcrop",
+	"license": ["GPL-2.0+"],
+	"require": {
+		"typo3/cms-core": "7.6.0-8.9.99"
+	},
+	"require-dev": {
+		"fabpot/php-cs-fixer": "*"
+	},
+	"replace": {
+		"unlocalizedcrop": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"CMSExperts\\Unlocalizedcrop\\": "Classes/"
+		}
+	}
+}
