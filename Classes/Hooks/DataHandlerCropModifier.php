@@ -67,8 +67,8 @@ class DataHandlerCropModifier
             } elseif (isset($fieldArray['crop'])) {
                 $this->getDatabaseConnection()->exec_UPDATEquery(
                     $this->table,
-                    ['crop' => $fieldArray['crop']],
-                    'l10n_parent=' . (int)$id . ' AND deleted=0'
+                    'l10n_parent=' . (int)$id . ' AND deleted=0',
+                    ['crop' => $fieldArray['crop']]
                 );
             }
         }
