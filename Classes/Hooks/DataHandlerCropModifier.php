@@ -1,5 +1,5 @@
 <?php
-namespace CMSExperts\Unlocalizedcrop\Hooks;
+namespace B13\Unlocalizedcrop\Hooks;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,8 +15,10 @@ namespace CMSExperts\Unlocalizedcrop\Hooks;
  */
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook for two things
@@ -25,16 +27,11 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
  * the "crop" field is distributed to all translations.
  *
  * When updating a sys_file_reference record that IS a translation,
- * remove the "crop" field so it is stil lthe one from the original language.
+ * remove the "crop" field so it is still the one from the original language.
  */
 class DataHandlerCropModifier
 {
-
-    /**
-     * short hand variable name
-     * @var string
-     */
-    protected $table = 'sys_file_reference';
+    private const TABLE = 'sys_file_reference';
 
     /**
      * This hook is called before the data is saved to the database
@@ -47,7 +44,7 @@ class DataHandlerCropModifier
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $dataHandlerObject)
     {
-        if ($table !== $this->table) {
+        if ($table !== self::TABLE) {
             return;
         }
 
@@ -58,17 +55,17 @@ class DataHandlerCropModifier
         }
 
         if ($status === 'update') {
-            $fullRecord = BackendUtility::getRecord($this->table, $id);
+            $fullRecord = BackendUtility::getRecord(self::TABLE, $id);
             // It's a translation, use the crop data from the parent
             if ($fullRecord['l10n_parent'] > 0) {
                 $fieldArray = $this->getCropValueFromRecord($fieldArray['l10n_parent'], $fieldArray);
                 // it's a modification to the original language, distribute the change to all translations as well
                 // but no change in the original language needed
             } elseif (isset($fieldArray['crop'])) {
-                $this->getDatabaseConnection()->exec_UPDATEquery(
-                    $this->table,
-                    'l10n_parent=' . (int)$id . ' AND deleted=0',
-                    ['crop' => $fieldArray['crop']]
+                $this->getConnection()->update(
+                    self::TABLE,
+                    ['crop' => $fieldArray['crop']],
+                    ['l10n_parent' => (int)$id, 'deleted' => 0]
                 );
             }
         }
@@ -83,20 +80,15 @@ class DataHandlerCropModifier
      */
     protected function getCropValueFromRecord($uid, $fieldArray)
     {
-        $parent = BackendUtility::getRecord($this->table, $uid);
+        $parent = BackendUtility::getRecord(self::TABLE, $uid);
         if (is_array($parent)) {
             $fieldArray['crop'] = $parent['crop'];
         }
         return $fieldArray;
     }
 
-    /**
-     * Fetches the current database connection
-     *
-     * @return DatabaseConnection
-     */
-    protected function getDatabaseConnection()
+    protected function getConnection(): Connection
     {
-        return $GLOBALS['TYPO3_DB'];
+        return GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable(self::TABLE);
     }
 }

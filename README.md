@@ -18,11 +18,11 @@ information (or even a different picture), then it's not a translation anymore b
 
 ## How to install
 
-You can set this up via composer (composer require cmsexperts/unlocalizedcrop) or via TER (extension name "unlocalizedcrop"),
-it runs with TYPO3 v7 and TYPO3 v8.
+You can set this up via composer (`composer require b13/unlocalizedcrop`) or via TER (extension name "unlocalizedcrop"),
+it runs with TYPO3 v8+.
 
-There is a extbase command controller to migrate an existing installation with existing sys_file_reference records in translations
-to have everything in sync from the beginning.
+There is a CLI command to migrate an existing installation with existing sys_file_reference records in translations
+to have everything in sync from the beginning. Use it via `vendor/bin/typo3 unlocalizedcrop:migrate`.
 
 ## License
 
@@ -34,4 +34,4 @@ For details see LICENSE.txt in this repository.
 ## Credits
 
 * Initial development: Benni Mack
-* sponsored by b:dreizehn, Germany (www.b13.de)
+* sponsored by b13 (www.b13.com)
