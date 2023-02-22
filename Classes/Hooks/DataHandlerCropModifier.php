@@ -54,14 +54,14 @@ class DataHandlerCropModifier
             $fieldArray = $this->getCropValueFromRecord($fieldArray['l10n_parent'], $fieldArray);
         }
 
-        if ($status === 'update') {
+        if ($status === 'update' && isset($fieldArray['crop'])) {
             $fullRecord = BackendUtility::getRecord(self::TABLE, $id);
             // It's a translation, use the crop data from the parent
             if ($fullRecord['l10n_parent'] > 0) {
-                $fieldArray = $this->getCropValueFromRecord($fieldArray['l10n_parent'], $fieldArray);
+                $fieldArray = $this->getCropValueFromRecord($fullRecord['l10n_parent'], $fieldArray);
                 // it's a modification to the original language, distribute the change to all translations as well
                 // but no change in the original language needed
-            } elseif (isset($fieldArray['crop'])) {
+            } else {
                 $this->getConnection()->update(
                     self::TABLE,
                     ['crop' => $fieldArray['crop']],
