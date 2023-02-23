@@ -1,4 +1,5 @@
 <?php
+
 namespace B13\Unlocalizedcrop\Hooks;
 
 /*
@@ -59,8 +60,8 @@ class DataHandlerCropModifier
             // It's a translation, use the crop data from the parent
             if ($fullRecord['l10n_parent'] > 0) {
                 $fieldArray = $this->getCropValueFromRecord($fullRecord['l10n_parent'], $fieldArray);
-                // it's a modification to the original language, distribute the change to all translations as well
-                // but no change in the original language needed
+            // it's a modification to the original language, distribute the change to all translations as well
+            // but no change in the original language needed
             } else {
                 $this->getConnection()->update(
                     self::TABLE,

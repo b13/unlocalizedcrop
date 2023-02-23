@@ -1,4 +1,5 @@
 <?php
+
 namespace B13\Unlocalizedcrop\Command;
 
 /*

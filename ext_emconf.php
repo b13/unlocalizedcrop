@@ -1,4 +1,5 @@
 <?php
+
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Disable cropping for localized sys_file_reference records',
     'description' => 'Cropping of localized records are automatically taken from the original language.',
@@ -12,6 +13,6 @@ $EM_CONF[$_EXTKEY] = [
     'constraints' => [
         'depends' => [
             'typo3' => '8.7.0-11.5.99',
-        ]
+        ],
     ],
 ];
