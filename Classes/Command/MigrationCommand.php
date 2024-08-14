@@ -33,7 +33,7 @@ class MigrationCommand extends Command
 {
     private const TABLE = 'sys_file_reference';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $connection = $this->getConnection();
