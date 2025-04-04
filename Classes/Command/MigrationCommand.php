@@ -40,15 +40,25 @@ class MigrationCommand extends Command
         // Fetch all original records (no translations)
         $queryBuilder = $connection->createQueryBuilder();
         $queryBuilder->getRestrictions()->removeAll();
-        $originalRecordsWithCroppingInformation = $queryBuilder
+        $queryBuilder
             ->select('uid', 'crop')
             ->from(self::TABLE)
             ->where(
                 $queryBuilder->expr()->neq('crop', $queryBuilder->createNamedParameter('""')),
                 $queryBuilder->expr()->eq('l10n_parent', 0)
-            )
-            ->execute()
-            ->fetchAll();
+            );
+
+        if (method_exists($queryBuilder, 'execute')) {
+            $queryBuilder->execute();
+        } else {
+            $queryBuilder->executeQuery();
+        }
+
+        if (method_exists($queryBuilder, 'fetchAll')) {
+            $originalRecordsWithCroppingInformation = $queryBuilder->fetchAll();
+        } else {
+            $originalRecordsWithCroppingInformation = $queryBuilder->fetchAllAssociative();
+        }
 
         $io->writeln('Found ' . count($originalRecordsWithCroppingInformation) . ' records with crop information');
 
