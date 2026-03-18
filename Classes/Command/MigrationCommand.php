@@ -54,7 +54,7 @@ class MigrationCommand extends Command
             $result = $queryBuilder->executeQuery();
         }
 
-        if (method_exists($queryBuilder, 'fetchAll')) {
+        if (method_exists($result, 'fetchAll')) {
             $originalRecordsWithCroppingInformation = $result->fetchAll();
         } else {
             $originalRecordsWithCroppingInformation = $result->fetchAllAssociative();
