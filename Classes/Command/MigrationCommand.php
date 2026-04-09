@@ -49,15 +49,15 @@ class MigrationCommand extends Command
             );
 
         if (method_exists($queryBuilder, 'execute')) {
-            $queryBuilder->execute();
+            $result = $queryBuilder->execute();
         } else {
-            $queryBuilder->executeQuery();
+            $result = $queryBuilder->executeQuery();
         }
 
-        if (method_exists($queryBuilder, 'fetchAll')) {
-            $originalRecordsWithCroppingInformation = $queryBuilder->fetchAll();
+        if (method_exists($result, 'fetchAll')) {
+            $originalRecordsWithCroppingInformation = $result->fetchAll();
         } else {
-            $originalRecordsWithCroppingInformation = $queryBuilder->fetchAllAssociative();
+            $originalRecordsWithCroppingInformation = $result->fetchAllAssociative();
         }
 
         $io->writeln('Found ' . count($originalRecordsWithCroppingInformation) . ' records with crop information');
